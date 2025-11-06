@@ -185,6 +185,7 @@ function SettingsMenu({ clocks, isLocked, background, onToggleLock, onAddClock, 
                               onChange={(settings) => handleNameSettingsChange(clock.id, settings)}
                               fonts={FONTS}
                               showSizeControl={true}
+                              disabled={clock.autoColor}
                             />
                           </div>
                         )}
@@ -304,6 +305,7 @@ function SettingsMenu({ clocks, isLocked, background, onToggleLock, onAddClock, 
                               onChange={(settings) => handleClockSettingsChange(clock.id, settings)}
                               fonts={FONTS}
                               showSizeControl={true}
+                              disabled={clock.autoColor}
                             />
                           </div>
                         )}
@@ -414,6 +416,7 @@ function SettingsMenu({ clocks, isLocked, background, onToggleLock, onAddClock, 
                               onChange={(settings) => handleDateSettingsChange(clock.id, settings)}
                               fonts={FONTS}
                               showSizeControl={true}
+                              disabled={clock.autoColor}
                             />
                           </div>
                         )}

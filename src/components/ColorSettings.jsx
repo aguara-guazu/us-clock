@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './ColorSettings.css'
 
-function ColorSettings({ settings, onChange, fonts }) {
+function ColorSettings({ settings, onChange, fonts, disabled = false }) {
   const [hexColor, setHexColor] = useState(rgbToHex(settings.color))
   const colorWheelRef = useRef(null)
   const [isDraggingWheel, setIsDraggingWheel] = useState(false)
@@ -163,6 +163,14 @@ function ColorSettings({ settings, onChange, fonts }) {
 
   return (
     <div className="color-settings">
+      {disabled && (
+        <div className="setting-group">
+          <p className="auto-color-message">
+            🎨 Colors are being controlled automatically based on background
+          </p>
+        </div>
+      )}
+
       <div className="setting-group">
         <label>Font</label>
         <select
@@ -181,11 +189,14 @@ function ColorSettings({ settings, onChange, fonts }) {
         <label>Color</label>
         <div
           ref={colorWheelRef}
-          className="color-wheel"
+          className={`color-wheel ${disabled ? 'disabled' : ''}`}
           onMouseDown={(e) => {
-            setIsDraggingWheel(true)
-            handleColorWheelClick(e)
+            if (!disabled) {
+              setIsDraggingWheel(true)
+              handleColorWheelClick(e)
+            }
           }}
+          style={{ pointerEvents: disabled ? 'none' : 'auto', opacity: disabled ? 0.5 : 1 }}
         />
       </div>
 
@@ -198,6 +209,7 @@ function ColorSettings({ settings, onChange, fonts }) {
           step="1"
           value={calculateBrightness(settings.color)}
           onChange={(e) => handleBrightnessChange(parseInt(e.target.value))}
+          disabled={disabled}
         />
       </div>
 
@@ -209,6 +221,7 @@ function ColorSettings({ settings, onChange, fonts }) {
           onChange={handleHexChange}
           onBlur={handleHexBlur}
           placeholder="#000000"
+          disabled={disabled}
         />
       </div>
 
@@ -223,6 +236,7 @@ function ColorSettings({ settings, onChange, fonts }) {
               max="255"
               value={settings.color.r}
               onChange={(e) => handleRgbChange('r', e.target.value)}
+              disabled={disabled}
             />
           </div>
           <div className="rgb-input">
@@ -233,6 +247,7 @@ function ColorSettings({ settings, onChange, fonts }) {
               max="255"
               value={settings.color.g}
               onChange={(e) => handleRgbChange('g', e.target.value)}
+              disabled={disabled}
             />
           </div>
           <div className="rgb-input">
@@ -243,6 +258,7 @@ function ColorSettings({ settings, onChange, fonts }) {
               max="255"
               value={settings.color.b}
               onChange={(e) => handleRgbChange('b', e.target.value)}
+              disabled={disabled}
             />
           </div>
         </div>
@@ -257,6 +273,7 @@ function ColorSettings({ settings, onChange, fonts }) {
           step="0.01"
           value={settings.alpha}
           onChange={(e) => onChange({ alpha: parseFloat(e.target.value) })}
+          disabled={disabled}
         />
       </div>
 
