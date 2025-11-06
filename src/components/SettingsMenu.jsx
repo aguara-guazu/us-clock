@@ -67,6 +67,17 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
     })
   }
 
+  const handleDateSettingsChange = (clockId, settings) => {
+    const clock = clocks.find(c => c.id === clockId)
+    onUpdateClock(clockId, {
+      dateSettings: { ...clock.dateSettings, ...settings }
+    })
+  }
+
+  const handleDateFormatChange = (clockId, format) => {
+    onUpdateClock(clockId, { dateFormat: format })
+  }
+
   const getDisplayName = (clock) => {
     if (clock.useTimezoneName) {
       const tzInfo = TIMEZONES.find(tz => tz.tz === clock.timezone)
@@ -240,6 +251,97 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
                             <ColorSettings
                               settings={clock.clockSettings}
                               onChange={(settings) => handleClockSettingsChange(clock.id, settings)}
+                              fonts={FONTS}
+                              showSizeControl={true}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Date Section */}
+                <div className="main-section">
+                  <div
+                    className={`main-section-header ${expandedMainSection === 'date' ? 'expanded' : ''}`}
+                    onClick={() => toggleMainSection('date')}
+                  >
+                    <span>Date</span>
+                    <span className="expand-icon">{expandedMainSection === 'date' ? '▼' : '▶'}</span>
+                  </div>
+                  {expandedMainSection === 'date' && (
+                    <div className="main-section-content">
+                      {/* Date Properties Subsection */}
+                      <div className="subsection">
+                        <div
+                          className={`subsection-header ${expandedSubSection === 'date-properties' ? 'expanded' : ''}`}
+                          onClick={() => toggleSubSection('date-properties')}
+                        >
+                          <span>Propiedades</span>
+                          <span className="expand-icon">{expandedSubSection === 'date-properties' ? '▼' : '▶'}</span>
+                        </div>
+                        {expandedSubSection === 'date-properties' && (
+                          <div className="subsection-content">
+                            <div className="setting-group">
+                              <label>Format</label>
+                              <select
+                                value={clock.dateFormat || 'numeric-dmy'}
+                                onChange={(e) => handleDateFormatChange(clock.id, e.target.value)}
+                              >
+                                <option value="numeric-dmy">Numeric (DD/MM/YYYY)</option>
+                                <option value="numeric-mdy">Numeric (MM/DD/YYYY)</option>
+                                <option value="written">Written (Day Month Year)</option>
+                              </select>
+                            </div>
+
+                            <div className="setting-group">
+                              <label>Display Options</label>
+                              <div className="display-options">
+                                <label className="checkbox-label">
+                                  <input
+                                    type="checkbox"
+                                    checked={clock.showDay ?? true}
+                                    onChange={(e) => handleDisplayToggle(clock.id, 'showDay', e.target.checked)}
+                                  />
+                                  Show day
+                                </label>
+                                <label className="checkbox-label">
+                                  <input
+                                    type="checkbox"
+                                    checked={clock.showMonth ?? true}
+                                    onChange={(e) => handleDisplayToggle(clock.id, 'showMonth', e.target.checked)}
+                                  />
+                                  Show month
+                                </label>
+                                <label className="checkbox-label">
+                                  <input
+                                    type="checkbox"
+                                    checked={clock.showYear ?? true}
+                                    onChange={(e) => handleDisplayToggle(clock.id, 'showYear', e.target.checked)}
+                                  />
+                                  Show year
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Date Style Subsection */}
+                      <div className="subsection">
+                        <div
+                          className={`subsection-header ${expandedSubSection === 'date-style' ? 'expanded' : ''}`}
+                          onClick={() => toggleSubSection('date-style')}
+                        >
+                          <span>Estilo</span>
+                          <span className="expand-icon">{expandedSubSection === 'date-style' ? '▼' : '▶'}</span>
+                        </div>
+                        {expandedSubSection === 'date-style' && (
+                          <div className="subsection-content">
+                            <ColorSettings
+                              settings={clock.dateSettings}
+                              onChange={(settings) => handleDateSettingsChange(clock.id, settings)}
                               fonts={FONTS}
                               showSizeControl={true}
                             />

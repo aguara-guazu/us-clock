@@ -34,6 +34,10 @@ function App() {
       showHours: true,
       showMinutes: true,
       showSeconds: true,
+      dateFormat: 'numeric-dmy', // 'numeric-dmy', 'numeric-mdy', 'written'
+      showDay: true,
+      showMonth: true,
+      showYear: true,
       position: { x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 50 },
       nameSettings: {
         fontClass: 'poiret-one-regular',
@@ -45,6 +49,12 @@ function App() {
         fontClass: 'major-mono-display-regular',
         color: { r: 0, g: 0, b: 0 },
         size: 120,
+        alpha: 1
+      },
+      dateSettings: {
+        fontClass: 'poiret-one-regular',
+        color: { r: 0, g: 0, b: 0 },
+        size: 18,
         alpha: 1
       }
     }]
@@ -94,6 +104,10 @@ function App() {
       showHours: true,
       showMinutes: true,
       showSeconds: true,
+      dateFormat: 'numeric-dmy',
+      showDay: true,
+      showMonth: true,
+      showYear: true,
       position: findFreePosition(),
       nameSettings: {
         fontClass: 'poiret-one-regular',
@@ -105,6 +119,12 @@ function App() {
         fontClass: 'major-mono-display-regular',
         color: { r: 0, g: 0, b: 0 },
         size: 80,
+        alpha: 1
+      },
+      dateSettings: {
+        fontClass: 'poiret-one-regular',
+        color: { r: 0, g: 0, b: 0 },
+        size: 18,
         alpha: 1
       }
     }
