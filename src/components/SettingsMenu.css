@@ -1,0 +1,242 @@
+.settings-menu {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 668px;
+}
+
+.settings-header {
+  margin-bottom: 16px;
+}
+
+.lock-button {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  background: white;
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.lock-button:hover {
+  background: #f0f3ff;
+}
+
+.lock-button.locked {
+  background: #667eea;
+  color: white;
+}
+
+.clocks-list {
+  margin-bottom: 16px;
+}
+
+.clock-entry {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.clock-header {
+  padding: 12px;
+  background: #f8f9fa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.clock-header:hover {
+  background: #f0f1f3;
+}
+
+.clock-header.expanded {
+  background: #e8e9eb;
+}
+
+.clock-icon {
+  font-size: 18px;
+}
+
+.clock-title {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.delete-button:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.delete-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.expand-icon {
+  font-size: 12px;
+  color: #666;
+}
+
+.clock-submenus {
+  padding: 8px;
+  background: white;
+}
+
+.submenu {
+  margin-bottom: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.submenu-header {
+  padding: 10px 12px;
+  background: #fafafa;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  transition: background 0.2s ease;
+}
+
+.submenu-header:hover {
+  background: #f0f0f0;
+}
+
+.submenu-header.expanded {
+  background: #e8e8e8;
+}
+
+.submenu-content {
+  padding: 12px;
+  background: white;
+}
+
+.setting-group {
+  margin-bottom: 16px;
+}
+
+.setting-group:last-child {
+  margin-bottom: 0;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.setting-group input[type="text"],
+.setting-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: border-color 0.2s ease;
+}
+
+.setting-group input[type="text"]:focus,
+.setting-group select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.add-clock-button {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed #667eea;
+  border-radius: 8px;
+  background: white;
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+}
+
+.add-clock-button:hover {
+  background: #f0f3ff;
+  border-style: solid;
+}
+
+.backgrounds-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 12px;
+  background: #f8f9fa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.section-header:hover {
+  background: #f0f1f3;
+}
+
+.section-header.expanded {
+  background: #e8e9eb;
+}
+
+.section-icon {
+  font-size: 18px;
+}
+
+.section-content {
+  padding: 16px;
+  background: white;
+}
+
+.placeholder-text {
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
+}

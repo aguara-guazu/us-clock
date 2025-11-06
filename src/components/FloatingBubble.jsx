@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import FontSelector from './FontSelector'
+import SettingsMenu from './SettingsMenu'
 import './FloatingBubble.css'
 
-function FloatingBubble({ fonts, settings, onChange }) {
+function FloatingBubble({ clocks, isLocked, onToggleLock, onAddClock, onRemoveClock, onUpdateClock }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [position, setPosition] = useState(() => {
     const saved = localStorage.getItem('bubblePosition')
@@ -39,8 +39,8 @@ function FloatingBubble({ fonts, settings, onChange }) {
       const newX = e.clientX - dragStart.x
       const newY = e.clientY - dragStart.y
 
-      const bubbleWidth = isExpanded ? 400 : 60
-      const bubbleHeight = isExpanded ? 600 : 60
+      const bubbleWidth = isExpanded ? 420 : 60
+      const bubbleHeight = isExpanded ? 700 : 60
       const maxX = window.innerWidth - bubbleWidth
       const maxY = window.innerHeight - bubbleHeight
 
@@ -77,8 +77,8 @@ function FloatingBubble({ fonts, settings, onChange }) {
   // Adjust position when expanding to keep panel in viewport
   useEffect(() => {
     if (isExpanded) {
-      const expandedWidth = 400
-      const expandedHeight = 600
+      const expandedWidth = 420
+      const expandedHeight = 700
       const viewportWidth = window.innerWidth
       const viewportHeight = window.innerHeight
 
@@ -158,10 +158,13 @@ function FloatingBubble({ fonts, settings, onChange }) {
             <div className="drag-handle">⋮⋮</div>
             <button className="close-button" onClick={handleClose}>✕</button>
           </div>
-          <FontSelector
-            fonts={fonts}
-            settings={settings}
-            onChange={onChange}
+          <SettingsMenu
+            clocks={clocks}
+            isLocked={isLocked}
+            onToggleLock={onToggleLock}
+            onAddClock={onAddClock}
+            onRemoveClock={onRemoveClock}
+            onUpdateClock={onUpdateClock}
           />
         </div>
       )}

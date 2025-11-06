@@ -1,0 +1,41 @@
+.clock-item {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 30px;
+  background: transparent;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+  user-select: none;
+  z-index: 100;
+}
+
+.clock-item.selected {
+  background: rgba(102, 126, 234, 0.05);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 8px 24px rgba(102, 126, 234, 0.15);
+  z-index: 200;
+}
+
+.clock-item.dragging {
+  cursor: grabbing !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5), 0 12px 32px rgba(102, 126, 234, 0.25);
+}
+
+.clock-item:not(.selected):hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.clock-name {
+  text-align: center;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.clock-time {
+  text-align: center;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
