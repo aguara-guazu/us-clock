@@ -67,9 +67,27 @@ function App() {
   const [isLocked, setIsLocked] = useState(false)
   const [selectedClockId, setSelectedClockId] = useState(null)
 
+  const [background, setBackground] = useState(() => {
+    const saved = localStorage.getItem('background')
+    if (saved) {
+      return JSON.parse(saved)
+    }
+    return {
+      type: 'none', // 'none', 'youtube', 'image'
+      youtubeUrl: '',
+      youtubeId: '',
+      isMuted: true,
+      imageData: null
+    }
+  })
+
   useEffect(() => {
     localStorage.setItem('clocks', JSON.stringify(clocks))
   }, [clocks])
+
+  useEffect(() => {
+    localStorage.setItem('background', JSON.stringify(background))
+  }, [background])
 
   const findFreePosition = () => {
     const margin = 50
@@ -167,8 +185,43 @@ function App() {
     }
   }
 
+  const updateBackground = (updates) => {
+    setBackground(prev => ({ ...prev, ...updates }))
+  }
+
+  const extractYouTubeId = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? match[2] : null
+  }
+
   return (
     <div className="app">
+      {/* Background layer */}
+      {background.type === 'youtube' && background.youtubeId && (
+        <div className="background-container">
+          <iframe
+            className="background-video"
+            src={`https://www.youtube.com/embed/${background.youtubeId}?autoplay=1&loop=1&playlist=${background.youtubeId}&controls=0&showinfo=0&modestbranding=1&mute=${background.isMuted ? 1 : 0}&enablejsapi=1&playsinline=1&rel=0`}
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          />
+        </div>
+      )}
+      {background.type === 'image' && background.imageData && (
+        <div
+          className="background-container"
+          style={{
+            backgroundImage: `url(${background.imageData})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+      )}
+
+      {/* Clocks */}
       {clocks.map(clock => (
         <ClockItem
           key={clock.id}
@@ -180,13 +233,18 @@ function App() {
           onUpdatePosition={(position) => updateClockPosition(clock.id, position)}
         />
       ))}
+
+      {/* Settings */}
       <FloatingBubble
         clocks={clocks}
         isLocked={isLocked}
+        background={background}
         onToggleLock={handleToggleLock}
         onAddClock={addClock}
         onRemoveClock={removeClock}
         onUpdateClock={updateClock}
+        onUpdateBackground={updateBackground}
+        extractYouTubeId={extractYouTubeId}
       />
     </div>
   )

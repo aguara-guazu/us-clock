@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import SettingsMenu from './SettingsMenu'
 import './FloatingBubble.css'
 
-function FloatingBubble({ clocks, isLocked, onToggleLock, onAddClock, onRemoveClock, onUpdateClock }) {
+function FloatingBubble({ clocks, isLocked, background, onToggleLock, onAddClock, onRemoveClock, onUpdateClock, onUpdateBackground, extractYouTubeId }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [position, setPosition] = useState(() => {
     const saved = localStorage.getItem('bubblePosition')
@@ -161,10 +161,13 @@ function FloatingBubble({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCl
           <SettingsMenu
             clocks={clocks}
             isLocked={isLocked}
+            background={background}
             onToggleLock={onToggleLock}
             onAddClock={onAddClock}
             onRemoveClock={onRemoveClock}
             onUpdateClock={onUpdateClock}
+            onUpdateBackground={onUpdateBackground}
+            extractYouTubeId={extractYouTubeId}
           />
         </div>
       )}

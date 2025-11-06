@@ -5,7 +5,7 @@ import TimezoneSelector from './TimezoneSelector'
 import ColorSettings from './ColorSettings'
 import './SettingsMenu.css'
 
-function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveClock, onUpdateClock }) {
+function SettingsMenu({ clocks, isLocked, background, onToggleLock, onAddClock, onRemoveClock, onUpdateClock, onUpdateBackground, extractYouTubeId }) {
   const [expandedClockId, setExpandedClockId] = useState(null)
   const [expandedMainSection, setExpandedMainSection] = useState(null) // 'name' or 'clock'
   const [expandedSubSection, setExpandedSubSection] = useState(null) // 'properties' or 'style'
@@ -415,7 +415,86 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
         </div>
         {backgroundsExpanded && (
           <div className="section-content">
-            <p className="placeholder-text">Coming soon...</p>
+            <div className="setting-group">
+              <label>Background Type</label>
+              <select
+                value={background.type}
+                onChange={(e) => {
+                  const newType = e.target.value
+                  onUpdateBackground({ type: newType })
+                  if (newType === 'none') {
+                    onUpdateBackground({ youtubeId: '', imageData: null })
+                  }
+                }}
+              >
+                <option value="none">None</option>
+                <option value="youtube">YouTube Video</option>
+                <option value="image">Image</option>
+              </select>
+            </div>
+
+            {background.type === 'youtube' && (
+              <>
+                <div className="setting-group">
+                  <label>YouTube URL</label>
+                  <input
+                    type="text"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    value={background.youtubeUrl}
+                    onChange={(e) => {
+                      const url = e.target.value
+                      const videoId = extractYouTubeId(url)
+                      onUpdateBackground({
+                        youtubeUrl: url,
+                        youtubeId: videoId || ''
+                      })
+                    }}
+                  />
+                  {background.youtubeUrl && !background.youtubeId && (
+                    <p className="error-text">Invalid YouTube URL</p>
+                  )}
+                </div>
+
+                <div className="setting-group checkbox-group">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={background.isMuted}
+                      onChange={(e) => onUpdateBackground({ isMuted: e.target.checked })}
+                    />
+                    Mute audio
+                  </label>
+                </div>
+              </>
+            )}
+
+            {background.type === 'image' && (
+              <div className="setting-group">
+                <label>Select Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0]
+                    if (file) {
+                      const reader = new FileReader()
+                      reader.onload = (event) => {
+                        onUpdateBackground({ imageData: event.target.result })
+                      }
+                      reader.readAsDataURL(file)
+                    }
+                  }}
+                />
+                {background.imageData && (
+                  <button
+                    className="remove-button"
+                    onClick={() => onUpdateBackground({ imageData: null })}
+                  >
+                    Remove Image
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
