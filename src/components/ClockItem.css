@@ -23,8 +23,12 @@
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5), 0 12px 32px rgba(102, 126, 234, 0.25);
 }
 
-.clock-item:not(.selected):hover {
+.clock-item:not(.selected):not(.locked):hover {
   background: rgba(0, 0, 0, 0.02);
+}
+
+.clock-item.locked {
+  cursor: default !important;
 }
 
 .clock-name {

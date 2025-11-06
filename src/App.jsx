@@ -131,6 +131,14 @@ function App() {
     ))
   }
 
+  const handleToggleLock = () => {
+    setIsLocked(!isLocked)
+    // Deselect any selected clock when locking
+    if (!isLocked) {
+      setSelectedClockId(null)
+    }
+  }
+
   return (
     <div className="app">
       {clocks.map(clock => (
@@ -147,7 +155,7 @@ function App() {
       <FloatingBubble
         clocks={clocks}
         isLocked={isLocked}
-        onToggleLock={() => setIsLocked(!isLocked)}
+        onToggleLock={handleToggleLock}
         onAddClock={addClock}
         onRemoveClock={removeClock}
         onUpdateClock={updateClock}

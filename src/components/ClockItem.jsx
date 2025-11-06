@@ -129,11 +129,10 @@ function ClockItem({ clock, isSelected, isLocked, onSelect, onDeselect, onUpdate
   return (
     <div
       ref={clockRef}
-      className={`clock-item ${isSelected ? 'selected' : ''} ${isDragging ? 'dragging' : ''}`}
+      className={`clock-item ${isSelected ? 'selected' : ''} ${isDragging ? 'dragging' : ''} ${isLocked ? 'locked' : ''}`}
       style={{
         left: `${clock.position.x}px`,
-        top: `${clock.position.y}px`,
-        cursor: isLocked ? 'default' : (isSelected ? 'move' : 'pointer')
+        top: `${clock.position.y}px`
       }}
       onClick={handleClick}
       onMouseDown={handleMouseDown}
