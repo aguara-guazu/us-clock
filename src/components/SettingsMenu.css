@@ -246,6 +246,80 @@
   background: white;
 }
 
+.main-section {
+  margin-bottom: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.main-section:last-child {
+  margin-bottom: 0;
+}
+
+.main-section-header {
+  padding: 10px 12px;
+  background: #fafafa;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  transition: background 0.2s ease;
+}
+
+.main-section-header:hover {
+  background: #f0f0f0;
+}
+
+.main-section-header.expanded {
+  background: #e8e8e8;
+}
+
+.main-section-content {
+  padding: 12px;
+  background: white;
+}
+
+.subsection {
+  margin-bottom: 12px;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.subsection:last-child {
+  margin-bottom: 0;
+}
+
+.subsection-header {
+  padding: 8px 10px;
+  background: #f5f5f5;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  transition: background 0.2s ease;
+}
+
+.subsection-header:hover {
+  background: #ececec;
+}
+
+.subsection-header.expanded {
+  background: #e0e0e0;
+}
+
+.subsection-content {
+  padding: 10px;
+  background: white;
+}
+
 .clock-name-section {
   padding-bottom: 12px;
   border-bottom: 1px solid #e8e8e8;
