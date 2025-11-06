@@ -6,7 +6,7 @@ import './SettingsMenu.css'
 
 function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveClock, onUpdateClock }) {
   const [expandedClockId, setExpandedClockId] = useState(null)
-  const [expandedSection, setExpandedSection] = useState(null) // 'name' or 'clock'
+  const [expandedSection, setExpandedSection] = useState(null) // 'properties' or 'style'
   const [backgroundsExpanded, setBackgroundsExpanded] = useState(false)
 
   const toggleClock = (clockId) => {
@@ -33,6 +33,10 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
 
   const handleUseTimezoneNameChange = (clockId, value) => {
     onUpdateClock(clockId, { useTimezoneName: value })
+  }
+
+  const handleDisplayToggle = (clockId, field, value) => {
+    onUpdateClock(clockId, { [field]: value })
   }
 
   const handleNameSettingsChange = (clockId, settings) => {
@@ -89,73 +93,117 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
             </div>
 
             {expandedClockId === clock.id && (
-              <div className="clock-submenus">
-                {/* Name Submenu */}
-                <div className="submenu">
-                  <div
-                    className={`submenu-header ${expandedSection === 'name' ? 'expanded' : ''}`}
-                    onClick={() => toggleSection('name')}
-                  >
-                    <span>Name</span>
-                    <span className="expand-icon">{expandedSection === 'name' ? '▼' : '▶'}</span>
+              <div className="clock-content">
+                {/* Name input and checkbox at top */}
+                <div className="clock-name-section">
+                  <div className="setting-group">
+                    <label>Display Name</label>
+                    <input
+                      type="text"
+                      value={clock.name}
+                      onChange={(e) => handleNameChange(clock.id, e.target.value)}
+                    />
                   </div>
-                  {expandedSection === 'name' && (
-                    <div className="submenu-content">
-                      <div className="setting-group">
-                        <label>Display Name</label>
-                        <input
-                          type="text"
-                          value={clock.name}
-                          onChange={(e) => handleNameChange(clock.id, e.target.value)}
-                        />
-                      </div>
 
-                      <div className="setting-group checkbox-group">
-                        <label>
-                          <input
-                            type="checkbox"
-                            checked={clock.useTimezoneName}
-                            onChange={(e) => handleUseTimezoneNameChange(clock.id, e.target.checked)}
-                          />
-                          Use timezone name
-                        </label>
-                      </div>
-
-                      <div className="setting-group">
-                        <label>Timezone</label>
-                        <TimezoneSelector
-                          value={clock.timezone}
-                          onChange={(tz) => handleTimezoneChange(clock.id, tz)}
-                        />
-                      </div>
-
-                      <ColorSettings
-                        settings={clock.nameSettings}
-                        onChange={(settings) => handleNameSettingsChange(clock.id, settings)}
-                        fonts={FONTS}
+                  <div className="setting-group checkbox-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={clock.useTimezoneName}
+                        onChange={(e) => handleUseTimezoneNameChange(clock.id, e.target.checked)}
                       />
-                    </div>
-                  )}
+                      Use timezone name
+                    </label>
+                  </div>
                 </div>
 
-                {/* Clock Submenu */}
-                <div className="submenu">
-                  <div
-                    className={`submenu-header ${expandedSection === 'clock' ? 'expanded' : ''}`}
-                    onClick={() => toggleSection('clock')}
-                  >
-                    <span>Clock</span>
-                    <span className="expand-icon">{expandedSection === 'clock' ? '▼' : '▶'}</span>
-                  </div>
-                  {expandedSection === 'clock' && (
-                    <div className="submenu-content">
-                      <ColorSettings
-                        settings={clock.clockSettings}
-                        onChange={(settings) => handleClockSettingsChange(clock.id, settings)}
-                        fonts={FONTS}
-                      />
+                {/* Submenus */}
+                <div className="clock-submenus">
+                  {/* Properties Submenu */}
+                  <div className="submenu">
+                    <div
+                      className={`submenu-header ${expandedSection === 'properties' ? 'expanded' : ''}`}
+                      onClick={() => toggleSection('properties')}
+                    >
+                      <span>Propiedades</span>
+                      <span className="expand-icon">{expandedSection === 'properties' ? '▼' : '▶'}</span>
                     </div>
-                  )}
+                    {expandedSection === 'properties' && (
+                      <div className="submenu-content">
+                        <div className="setting-group">
+                          <label>Timezone</label>
+                          <TimezoneSelector
+                            value={clock.timezone}
+                            onChange={(tz) => handleTimezoneChange(clock.id, tz)}
+                          />
+                        </div>
+
+                        <div className="setting-group">
+                          <label>Display Options</label>
+                          <div className="display-options">
+                            <label className="checkbox-label">
+                              <input
+                                type="checkbox"
+                                checked={clock.showHours !== false}
+                                onChange={(e) => handleDisplayToggle(clock.id, 'showHours', e.target.checked)}
+                              />
+                              Show hours
+                            </label>
+                            <label className="checkbox-label">
+                              <input
+                                type="checkbox"
+                                checked={clock.showMinutes !== false}
+                                onChange={(e) => handleDisplayToggle(clock.id, 'showMinutes', e.target.checked)}
+                              />
+                              Show minutes
+                            </label>
+                            <label className="checkbox-label">
+                              <input
+                                type="checkbox"
+                                checked={clock.showSeconds !== false}
+                                onChange={(e) => handleDisplayToggle(clock.id, 'showSeconds', e.target.checked)}
+                              />
+                              Show seconds
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Style Submenu */}
+                  <div className="submenu">
+                    <div
+                      className={`submenu-header ${expandedSection === 'style' ? 'expanded' : ''}`}
+                      onClick={() => toggleSection('style')}
+                    >
+                      <span>Estilo</span>
+                      <span className="expand-icon">{expandedSection === 'style' ? '▼' : '▶'}</span>
+                    </div>
+                    {expandedSection === 'style' && (
+                      <div className="submenu-content">
+                        <div className="style-section">
+                          <h4>Name Style</h4>
+                          <ColorSettings
+                            settings={clock.nameSettings}
+                            onChange={(settings) => handleNameSettingsChange(clock.id, settings)}
+                            fonts={FONTS}
+                            showSizeControl={true}
+                          />
+                        </div>
+
+                        <div className="style-section">
+                          <h4>Clock Style</h4>
+                          <ColorSettings
+                            settings={clock.clockSettings}
+                            onChange={(settings) => handleClockSettingsChange(clock.id, settings)}
+                            fonts={FONTS}
+                            showSizeControl={true}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

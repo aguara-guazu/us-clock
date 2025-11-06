@@ -31,6 +31,9 @@ function App() {
       name: 'Local Time',
       useTimezoneName: false,
       timezone: getLocalTimezone(),
+      showHours: true,
+      showMinutes: true,
+      showSeconds: true,
       position: { x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 50 },
       nameSettings: {
         fontClass: 'poiret-one-regular',
@@ -88,6 +91,9 @@ function App() {
       name: 'New Clock',
       useTimezoneName: false,
       timezone: getLocalTimezone(),
+      showHours: true,
+      showMinutes: true,
+      showSeconds: true,
       position: findFreePosition(),
       nameSettings: {
         fontClass: 'poiret-one-regular',

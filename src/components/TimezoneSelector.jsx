@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { TIMEZONES } from '../utils/timezones'
+import { TIMEZONES, getLocalTimezone } from '../utils/timezones'
 import './TimezoneSelector.css'
 
 function TimezoneSelector({ value, onChange }) {
@@ -8,6 +8,8 @@ function TimezoneSelector({ value, onChange }) {
   const [filteredTimezones, setFilteredTimezones] = useState(TIMEZONES)
   const selectorRef = useRef(null)
 
+  const LOCAL_OPTION = { city: 'Local (Device)', offset: '', tz: getLocalTimezone() }
+
   useEffect(() => {
     if (searchTerm) {
       const filtered = TIMEZONES.filter(tz =>
@@ -15,9 +17,14 @@ function TimezoneSelector({ value, onChange }) {
         tz.offset.toLowerCase().includes(searchTerm.toLowerCase()) ||
         tz.tz.toLowerCase().includes(searchTerm.toLowerCase())
       )
-      setFilteredTimezones(filtered)
+      // Add local option if search matches
+      if ('local'.includes(searchTerm.toLowerCase()) || 'device'.includes(searchTerm.toLowerCase())) {
+        setFilteredTimezones([LOCAL_OPTION, ...filtered])
+      } else {
+        setFilteredTimezones(filtered)
+      }
     } else {
-      setFilteredTimezones(TIMEZONES)
+      setFilteredTimezones([LOCAL_OPTION, ...TIMEZONES])
     }
   }, [searchTerm])
 
@@ -44,6 +51,14 @@ function TimezoneSelector({ value, onChange }) {
   }
 
   const getCurrentTimezone = () => {
+    // Check if it matches local timezone
+    if (value === getLocalTimezone()) {
+      const tzInfo = TIMEZONES.find(tz => tz.tz === value)
+      if (tzInfo) {
+        return { city: `Local (${tzInfo.city})`, offset: tzInfo.offset }
+      }
+      return LOCAL_OPTION
+    }
     return TIMEZONES.find(tz => tz.tz === value) || { city: 'Unknown', offset: '' }
   }
 

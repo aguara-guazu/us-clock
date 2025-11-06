@@ -80,23 +80,24 @@
   border-radius: 50%;
   cursor: crosshair;
   position: relative;
-  background: conic-gradient(
-    from 0deg,
-    hsl(0, 100%, 50%),
-    hsl(30, 100%, 50%),
-    hsl(60, 100%, 50%),
-    hsl(90, 100%, 50%),
-    hsl(120, 100%, 50%),
-    hsl(150, 100%, 50%),
-    hsl(180, 100%, 50%),
-    hsl(210, 100%, 50%),
-    hsl(240, 100%, 50%),
-    hsl(270, 100%, 50%),
-    hsl(300, 100%, 50%),
-    hsl(330, 100%, 50%),
-    hsl(360, 100%, 50%)
-  );
-  box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.6);
+  background:
+    conic-gradient(
+      from 0deg,
+      hsl(0, 100%, 50%),
+      hsl(30, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(90, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(150, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(210, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(270, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(330, 100%, 50%),
+      hsl(360, 100%, 50%)
+    );
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.3);
 }
 
 .color-wheel::before {
@@ -107,7 +108,8 @@
   right: 0;
   bottom: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, white 0%, transparent 70%);
+  background: radial-gradient(circle, white 0%, transparent 50%, black 100%);
+  pointer-events: none;
 }
 
 .rgb-inputs {

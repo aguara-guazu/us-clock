@@ -91,13 +91,27 @@ function ClockItem({ clock, isSelected, isLocked, onSelect, onDeselect, onUpdate
   const formatTime = (date) => {
     try {
       const zonedTime = toZonedTime(date, clock.timezone)
-      return format(zonedTime, 'HH:mm:ss', { timeZone: clock.timezone })
+      let formatString = ''
+
+      if (clock.showHours) formatString += 'HH'
+      if (clock.showMinutes) formatString += (formatString ? ':mm' : 'mm')
+      if (clock.showSeconds) formatString += (formatString ? ':ss' : 'ss')
+
+      if (!formatString) formatString = 'HH:mm:ss' // fallback
+
+      return format(zonedTime, formatString, { timeZone: clock.timezone })
     } catch (error) {
       // Fallback if timezone is invalid
       const hours = String(date.getHours()).padStart(2, '0')
       const minutes = String(date.getMinutes()).padStart(2, '0')
       const seconds = String(date.getSeconds()).padStart(2, '0')
-      return `${hours}:${minutes}:${seconds}`
+
+      let parts = []
+      if (clock.showHours) parts.push(hours)
+      if (clock.showMinutes) parts.push(minutes)
+      if (clock.showSeconds) parts.push(seconds)
+
+      return parts.length > 0 ? parts.join(':') : `${hours}:${minutes}:${seconds}`
     }
   }
 

@@ -23,6 +23,11 @@ function ColorSettings({ settings, onChange, fonts }) {
     } : settings.color
   }
 
+  // Update hex input when color changes externally
+  useEffect(() => {
+    setHexColor(rgbToHex(settings.color))
+  }, [settings.color])
+
   const handleColorChange = (color) => {
     onChange({ color })
     setHexColor(rgbToHex(color))
@@ -33,6 +38,13 @@ function ColorSettings({ settings, onChange, fonts }) {
     setHexColor(hex)
     if (/^#[0-9A-F]{6}$/i.test(hex)) {
       onChange({ color: hexToRgb(hex) })
+    }
+  }
+
+  const handleHexBlur = () => {
+    // Revert to current color if hex is invalid
+    if (!/^#[0-9A-F]{6}$/i.test(hexColor)) {
+      setHexColor(rgbToHex(settings.color))
     }
   }
 
@@ -65,10 +77,26 @@ function ColorSettings({ settings, onChange, fonts }) {
     const centerY = height / 2
     const angle = Math.atan2(y - centerY, x - centerX)
     const distance = Math.min(Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2), width / 2)
-    const saturation = distance / (width / 2)
+    const normalizedDistance = distance / (width / 2)
     const hue = (angle * 180 / Math.PI + 360) % 360
 
-    return hslToRgb(hue, saturation * 100, 50)
+    // Map distance to saturation and lightness
+    // Center (0): white (S=0, L=100)
+    // Middle (0.5): full color (S=100, L=50)
+    // Edge (1): black (S=100, L=0)
+    let saturation, lightness
+
+    if (normalizedDistance < 0.5) {
+      // From center to middle: increase saturation, decrease lightness
+      saturation = normalizedDistance * 200 // 0 to 100
+      lightness = 100 - normalizedDistance * 100 // 100 to 50
+    } else {
+      // From middle to edge: full saturation, decrease lightness to black
+      saturation = 100
+      lightness = (1 - normalizedDistance) * 100 // 50 to 0
+    }
+
+    return hslToRgb(hue, saturation, lightness)
   }
 
   function hslToRgb(h, s, l) {
@@ -130,6 +158,7 @@ function ColorSettings({ settings, onChange, fonts }) {
           type="text"
           value={hexColor}
           onChange={handleHexChange}
+          onBlur={handleHexBlur}
           placeholder="#000000"
         />
       </div>
