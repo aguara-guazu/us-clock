@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import Clock from './components/Clock'
 import FloatingBubble from './components/FloatingBubble'
-import FontSelector from './components/FontSelector'
 import './App.css'
 
 const FONTS = [
@@ -20,7 +19,6 @@ const FONTS = [
 ]
 
 function App() {
-  const [showSelector, setShowSelector] = useState(false)
   const [clockSettings, setClockSettings] = useState(() => {
     const saved = localStorage.getItem('clockSettings')
     return saved ? JSON.parse(saved) : {
@@ -42,15 +40,11 @@ function App() {
   return (
     <div className="app">
       <Clock settings={clockSettings} />
-      <FloatingBubble onClick={() => setShowSelector(!showSelector)} />
-      {showSelector && (
-        <FontSelector
-          fonts={FONTS}
-          settings={clockSettings}
-          onChange={handleSettingsChange}
-          onClose={() => setShowSelector(false)}
-        />
-      )}
+      <FloatingBubble
+        fonts={FONTS}
+        settings={clockSettings}
+        onChange={handleSettingsChange}
+      />
     </div>
   )
 }

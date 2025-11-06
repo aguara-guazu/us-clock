@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './FontSelector.css'
 
-function FontSelector({ fonts, settings, onChange, onClose }) {
+function FontSelector({ fonts, settings, onChange }) {
   const [hexColor, setHexColor] = useState(rgbToHex(settings.color))
   const colorWheelRef = useRef(null)
   const [isDraggingWheel, setIsDraggingWheel] = useState(false)
@@ -97,119 +97,110 @@ function FontSelector({ fonts, settings, onChange, onClose }) {
   }, [isDraggingWheel])
 
   return (
-    <div className="font-selector-overlay" onClick={onClose}>
-      <div className="font-selector" onClick={(e) => e.stopPropagation()}>
-        <div className="font-selector-header">
-          <h2>Clock Settings</h2>
-          <button className="close-button" onClick={onClose}>✕</button>
-        </div>
+    <div className="font-selector-content">
+      <div className="setting-group">
+        <label>Font</label>
+        <select
+          value={settings.fontClass}
+          onChange={(e) => onChange({ fontClass: e.target.value })}
+        >
+          {fonts.map((font) => (
+            <option key={font.class} value={font.class}>
+              {font.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        <div className="font-selector-content">
-          <div className="setting-group">
-            <label>Font</label>
-            <select
-              value={settings.fontClass}
-              onChange={(e) => onChange({ fontClass: e.target.value })}
-            >
-              {fonts.map((font) => (
-                <option key={font.class} value={font.class}>
-                  {font.name}
-                </option>
-              ))}
-            </select>
-          </div>
+      <div className="setting-group">
+        <label>Color</label>
+        <div
+          ref={colorWheelRef}
+          className="color-wheel"
+          onMouseDown={(e) => {
+            setIsDraggingWheel(true)
+            handleColorWheelClick(e)
+          }}
+        />
+      </div>
 
-          <div className="setting-group">
-            <label>Color</label>
-            <div
-              ref={colorWheelRef}
-              className="color-wheel"
-              onMouseDown={(e) => {
-                setIsDraggingWheel(true)
-                handleColorWheelClick(e)
-              }}
-            />
-          </div>
+      <div className="setting-group">
+        <label>Hex</label>
+        <input
+          type="text"
+          value={hexColor}
+          onChange={handleHexChange}
+          placeholder="#000000"
+        />
+      </div>
 
-          <div className="setting-group">
-            <label>Hex</label>
+      <div className="setting-group">
+        <label>RGB</label>
+        <div className="rgb-inputs">
+          <div className="rgb-input">
+            <label>R</label>
             <input
-              type="text"
-              value={hexColor}
-              onChange={handleHexChange}
-              placeholder="#000000"
-            />
-          </div>
-
-          <div className="setting-group">
-            <label>RGB</label>
-            <div className="rgb-inputs">
-              <div className="rgb-input">
-                <label>R</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="255"
-                  value={settings.color.r}
-                  onChange={(e) => handleRgbChange('r', e.target.value)}
-                />
-              </div>
-              <div className="rgb-input">
-                <label>G</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="255"
-                  value={settings.color.g}
-                  onChange={(e) => handleRgbChange('g', e.target.value)}
-                />
-              </div>
-              <div className="rgb-input">
-                <label>B</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="255"
-                  value={settings.color.b}
-                  onChange={(e) => handleRgbChange('b', e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="setting-group">
-            <label>Opacity: {Math.round(settings.alpha * 100)}%</label>
-            <input
-              type="range"
+              type="number"
               min="0"
-              max="1"
-              step="0.01"
-              value={settings.alpha}
-              onChange={(e) => onChange({ alpha: parseFloat(e.target.value) })}
+              max="255"
+              value={settings.color.r}
+              onChange={(e) => handleRgbChange('r', e.target.value)}
             />
           </div>
-
-          <div className="setting-group">
-            <label>Size: {settings.size}px</label>
+          <div className="rgb-input">
+            <label>G</label>
             <input
-              type="range"
-              min="40"
-              max="300"
-              step="10"
-              value={settings.size}
-              onChange={(e) => onChange({ size: parseInt(e.target.value) })}
+              type="number"
+              min="0"
+              max="255"
+              value={settings.color.g}
+              onChange={(e) => handleRgbChange('g', e.target.value)}
             />
           </div>
-
-          <div className="color-preview">
-            <div
-              className="preview-box"
-              style={{
-                backgroundColor: `rgba(${settings.color.r}, ${settings.color.g}, ${settings.color.b}, ${settings.alpha})`
-              }}
+          <div className="rgb-input">
+            <label>B</label>
+            <input
+              type="number"
+              min="0"
+              max="255"
+              value={settings.color.b}
+              onChange={(e) => handleRgbChange('b', e.target.value)}
             />
           </div>
         </div>
+      </div>
+
+      <div className="setting-group">
+        <label>Opacity: {Math.round(settings.alpha * 100)}%</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={settings.alpha}
+          onChange={(e) => onChange({ alpha: parseFloat(e.target.value) })}
+        />
+      </div>
+
+      <div className="setting-group">
+        <label>Size: {settings.size}px</label>
+        <input
+          type="range"
+          min="40"
+          max="300"
+          step="10"
+          value={settings.size}
+          onChange={(e) => onChange({ size: parseInt(e.target.value) })}
+        />
+      </div>
+
+      <div className="color-preview">
+        <div
+          className="preview-box"
+          style={{
+            backgroundColor: `rgba(${settings.color.r}, ${settings.color.g}, ${settings.color.b}, ${settings.alpha})`
+          }}
+        />
       </div>
     </div>
   )
