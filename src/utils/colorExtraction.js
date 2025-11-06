@@ -1,5 +1,6 @@
 // Extract dominant color from an image or video
 export function extractDominantColor(source, sourceType) {
+  console.log('extractDominantColor called:', { source: source.substring(0, 100), sourceType })
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
@@ -12,11 +13,16 @@ export function extractDominantColor(source, sourceType) {
         const img = new Image()
         img.crossOrigin = 'anonymous'
         img.onload = () => {
+          console.log('Image loaded successfully:', source.substring(0, 100))
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
           const color = analyzeDominantColor(ctx, canvas.width, canvas.height)
+          console.log('Extracted color:', color)
           resolve(color)
         }
-        img.onerror = () => resolve({ r: 128, g: 128, b: 128 })
+        img.onerror = (e) => {
+          console.error('Image load error:', source, e)
+          resolve({ r: 128, g: 128, b: 128 })
+        }
         img.src = source
       } else if (sourceType === 'video') {
         // For video, we need to draw current frame
