@@ -4,6 +4,7 @@ import './FloatingBubble.css'
 
 function FloatingBubble({ fonts, settings, onChange }) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
   const [position, setPosition] = useState(() => {
     const saved = localStorage.getItem('bubblePosition')
     return saved ? JSON.parse(saved) : { x: window.innerWidth - 100, y: window.innerHeight - 100 }
@@ -65,13 +66,21 @@ function FloatingBubble({ fonts, settings, onChange }) {
   }
 
   const handleClose = (e) => {
-    setIsExpanded(false)
-    // Restore original collapsed position
-    if (collapsedPosition) {
-      setPosition(collapsedPosition)
-      setCollapsedPosition(null)
-    }
-    e.stopPropagation()
+    if (e) e.stopPropagation()
+
+    // Start closing animation
+    setIsClosing(true)
+
+    // Wait for animation to complete before actually closing
+    setTimeout(() => {
+      setIsExpanded(false)
+      setIsClosing(false)
+      // Restore original collapsed position
+      if (collapsedPosition) {
+        setPosition(collapsedPosition)
+        setCollapsedPosition(null)
+      }
+    }, 600) // Animation duration
   }
 
   // Adjust position when expanding to keep panel in viewport
@@ -115,15 +124,10 @@ function FloatingBubble({ fonts, settings, onChange }) {
 
   // Close when clicking outside
   useEffect(() => {
-    if (isExpanded) {
+    if (isExpanded && !isClosing) {
       const handleClickOutside = (e) => {
         if (bubbleRef.current && !bubbleRef.current.contains(e.target)) {
-          setIsExpanded(false)
-          // Restore original collapsed position
-          if (collapsedPosition) {
-            setPosition(collapsedPosition)
-            setCollapsedPosition(null)
-          }
+          handleClose()
         }
       }
 
@@ -132,15 +136,23 @@ function FloatingBubble({ fonts, settings, onChange }) {
         document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [isExpanded, collapsedPosition])
+  }, [isExpanded, isClosing, collapsedPosition])
+
+  // Calculate target position for genie animation
+  const targetX = collapsedPosition ? collapsedPosition.x : position.x
+  const targetY = collapsedPosition ? collapsedPosition.y : position.y
 
   return (
     <div
       ref={bubbleRef}
-      className={`floating-bubble ${isExpanded ? 'expanded' : ''} ${isDragging ? 'dragging' : ''}`}
+      className={`floating-bubble ${isExpanded ? 'expanded' : ''} ${isDragging ? 'dragging' : ''} ${isClosing ? 'closing' : ''}`}
       style={{
         left: `${position.x}px`,
-        top: `${position.y}px`
+        top: `${position.y}px`,
+        '--target-x': `${targetX}px`,
+        '--target-y': `${targetY}px`,
+        '--start-x': `${position.x}px`,
+        '--start-y': `${position.y}px`
       }}
       onMouseDown={handleMouseDown}
       onClick={handleToggle}
