@@ -8,13 +8,17 @@ function FloatingBubble({ fonts, settings, onChange }) {
     const saved = localStorage.getItem('bubblePosition')
     return saved ? JSON.parse(saved) : { x: window.innerWidth - 100, y: window.innerHeight - 100 }
   })
+  const [collapsedPosition, setCollapsedPosition] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const bubbleRef = useRef(null)
 
   useEffect(() => {
-    localStorage.setItem('bubblePosition', JSON.stringify(position))
-  }, [position])
+    // Only save to localStorage when collapsed
+    if (!isExpanded) {
+      localStorage.setItem('bubblePosition', JSON.stringify(position))
+    }
+  }, [position, isExpanded])
 
   const handleMouseDown = (e) => {
     // Only allow dragging from the header when expanded, or from anywhere when collapsed
@@ -53,6 +57,8 @@ function FloatingBubble({ fonts, settings, onChange }) {
 
   const handleToggle = (e) => {
     if (!isDragging && !isExpanded) {
+      // Save current position before expanding
+      setCollapsedPosition({ ...position })
       setIsExpanded(true)
     }
     e.stopPropagation()
@@ -60,6 +66,11 @@ function FloatingBubble({ fonts, settings, onChange }) {
 
   const handleClose = (e) => {
     setIsExpanded(false)
+    // Restore original collapsed position
+    if (collapsedPosition) {
+      setPosition(collapsedPosition)
+      setCollapsedPosition(null)
+    }
     e.stopPropagation()
   }
 
@@ -108,6 +119,11 @@ function FloatingBubble({ fonts, settings, onChange }) {
       const handleClickOutside = (e) => {
         if (bubbleRef.current && !bubbleRef.current.contains(e.target)) {
           setIsExpanded(false)
+          // Restore original collapsed position
+          if (collapsedPosition) {
+            setPosition(collapsedPosition)
+            setCollapsedPosition(null)
+          }
         }
       }
 
@@ -116,7 +132,7 @@ function FloatingBubble({ fonts, settings, onChange }) {
         document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [isExpanded])
+  }, [isExpanded, collapsedPosition])
 
   return (
     <div
