@@ -63,6 +63,34 @@ function FloatingBubble({ fonts, settings, onChange }) {
     e.stopPropagation()
   }
 
+  // Adjust position when expanding to keep panel in viewport
+  useEffect(() => {
+    if (isExpanded) {
+      const expandedWidth = 400
+      const expandedHeight = 600
+      const viewportWidth = window.innerWidth
+      const viewportHeight = window.innerHeight
+
+      let newX = position.x
+      let newY = position.y
+
+      // Check if panel goes beyond right edge
+      if (position.x + expandedWidth > viewportWidth) {
+        newX = Math.max(0, viewportWidth - expandedWidth)
+      }
+
+      // Check if panel goes beyond bottom edge
+      if (position.y + expandedHeight > viewportHeight) {
+        newY = Math.max(0, viewportHeight - expandedHeight)
+      }
+
+      // Only update if position needs adjustment
+      if (newX !== position.x || newY !== position.y) {
+        setPosition({ x: newX, y: newY })
+      }
+    }
+  }, [isExpanded])
+
   useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
