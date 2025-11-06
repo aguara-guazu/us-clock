@@ -54,6 +54,43 @@ function ColorSettings({ settings, onChange, fonts }) {
     handleColorChange(newColor)
   }
 
+  // Calculate brightness (0-100) from current color
+  const calculateBrightness = (color) => {
+    // Use perceived brightness formula
+    const brightness = (0.299 * color.r + 0.587 * color.g + 0.114 * color.b) / 255 * 100
+    return Math.round(brightness)
+  }
+
+  const handleBrightnessChange = (brightnessPercent) => {
+    const { r, g, b } = settings.color
+
+    // If current color is black, we can't adjust brightness
+    if (r === 0 && g === 0 && b === 0) {
+      if (brightnessPercent > 0) {
+        // Start with gray
+        const gray = Math.round(255 * brightnessPercent / 100)
+        handleColorChange({ r: gray, g: gray, b: gray })
+      }
+      return
+    }
+
+    // Find the maximum component to preserve hue
+    const max = Math.max(r, g, b)
+
+    // Calculate the target maximum value based on brightness
+    const targetMax = Math.round(255 * brightnessPercent / 100)
+
+    // Scale all components proportionally
+    const scale = targetMax / max
+    const newColor = {
+      r: Math.round(r * scale),
+      g: Math.round(g * scale),
+      b: Math.round(b * scale)
+    }
+
+    handleColorChange(newColor)
+  }
+
   const handleColorWheelClick = (e) => {
     const rect = colorWheelRef.current.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -149,6 +186,18 @@ function ColorSettings({ settings, onChange, fonts }) {
             setIsDraggingWheel(true)
             handleColorWheelClick(e)
           }}
+        />
+      </div>
+
+      <div className="setting-group">
+        <label>Brightness: {calculateBrightness(settings.color)}%</label>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          value={calculateBrightness(settings.color)}
+          onChange={(e) => handleBrightnessChange(parseInt(e.target.value))}
         />
       </div>
 

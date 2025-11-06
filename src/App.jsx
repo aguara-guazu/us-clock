@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import ClockItem from './components/ClockItem'
 import FloatingBubble from './components/FloatingBubble'
+import YouTubeBackground from './components/YouTubeBackground'
 import { getLocalTimezone } from './utils/timezones'
 import './App.css'
 
@@ -199,15 +200,7 @@ function App() {
     <div className="app">
       {/* Background layer */}
       {background.type === 'youtube' && background.youtubeId && (
-        <div className="background-container">
-          <iframe
-            className="background-video"
-            src={`https://www.youtube.com/embed/${background.youtubeId}?autoplay=1&loop=1&playlist=${background.youtubeId}&controls=0&showinfo=0&modestbranding=1&mute=${background.isMuted ? 1 : 0}&enablejsapi=1&playsinline=1&rel=0`}
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          />
-        </div>
+        <YouTubeBackground videoId={background.youtubeId} isMuted={background.isMuted} />
       )}
       {background.type === 'image' && background.imageData && (
         <div
