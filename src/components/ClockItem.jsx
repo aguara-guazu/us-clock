@@ -120,55 +120,73 @@ function ClockItem({ clock, isSelected, isLocked, onSelect, onDeselect, onUpdate
       const zonedTime = toZonedTime(date, clock.timezone)
 
       // If nothing is selected to show, return empty
-      if (!clock.showDay && !clock.showMonth && !clock.showYear) {
+      if (!clock.showDay && !clock.showMonth && !clock.showYear && !clock.showDayOfWeek) {
         return ''
+      }
+
+      let result = []
+
+      // Add day of week first if enabled
+      if (clock.showDayOfWeek) {
+        result.push(format(zonedTime, 'EEEE', { timeZone: clock.timezone }))
       }
 
       if (clock.dateFormat === 'written') {
         // Written format like "20 December 2025"
-        let parts = []
-        if (clock.showDay) parts.push(format(zonedTime, 'd', { timeZone: clock.timezone }))
-        if (clock.showMonth) parts.push(format(zonedTime, 'MMMM', { timeZone: clock.timezone }))
-        if (clock.showYear) parts.push(format(zonedTime, 'yyyy', { timeZone: clock.timezone }))
-        return parts.join(' ')
+        let dateParts = []
+        if (clock.showDay) dateParts.push(format(zonedTime, 'd', { timeZone: clock.timezone }))
+        if (clock.showMonth) dateParts.push(format(zonedTime, 'MMMM', { timeZone: clock.timezone }))
+        if (clock.showYear) dateParts.push(format(zonedTime, 'yyyy', { timeZone: clock.timezone }))
+        if (dateParts.length > 0) result.push(dateParts.join(' '))
       } else if (clock.dateFormat === 'numeric-mdy') {
         // MM/DD/YYYY format
-        let parts = []
-        if (clock.showMonth) parts.push(format(zonedTime, 'MM', { timeZone: clock.timezone }))
-        if (clock.showDay) parts.push(format(zonedTime, 'dd', { timeZone: clock.timezone }))
-        if (clock.showYear) parts.push(format(zonedTime, 'yyyy', { timeZone: clock.timezone }))
-        return parts.join('/')
+        let dateParts = []
+        if (clock.showMonth) dateParts.push(format(zonedTime, 'MM', { timeZone: clock.timezone }))
+        if (clock.showDay) dateParts.push(format(zonedTime, 'dd', { timeZone: clock.timezone }))
+        if (clock.showYear) dateParts.push(format(zonedTime, 'yyyy', { timeZone: clock.timezone }))
+        if (dateParts.length > 0) result.push(dateParts.join('/'))
       } else {
         // DD/MM/YYYY format (default)
-        let parts = []
-        if (clock.showDay) parts.push(format(zonedTime, 'dd', { timeZone: clock.timezone }))
-        if (clock.showMonth) parts.push(format(zonedTime, 'MM', { timeZone: clock.timezone }))
-        if (clock.showYear) parts.push(format(zonedTime, 'yyyy', { timeZone: clock.timezone }))
-        return parts.join('/')
+        let dateParts = []
+        if (clock.showDay) dateParts.push(format(zonedTime, 'dd', { timeZone: clock.timezone }))
+        if (clock.showMonth) dateParts.push(format(zonedTime, 'MM', { timeZone: clock.timezone }))
+        if (clock.showYear) dateParts.push(format(zonedTime, 'yyyy', { timeZone: clock.timezone }))
+        if (dateParts.length > 0) result.push(dateParts.join('/'))
       }
+
+      return result.join(', ')
     } catch (error) {
       // Fallback if timezone is invalid
       const day = String(date.getDate()).padStart(2, '0')
       const month = String(date.getMonth() + 1).padStart(2, '0')
       const year = date.getFullYear()
+      const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
-      if (!clock.showDay && !clock.showMonth && !clock.showYear) {
+      if (!clock.showDay && !clock.showMonth && !clock.showYear && !clock.showDayOfWeek) {
         return ''
       }
 
-      if (clock.dateFormat === 'numeric-mdy') {
-        let parts = []
-        if (clock.showMonth) parts.push(month)
-        if (clock.showDay) parts.push(day)
-        if (clock.showYear) parts.push(year)
-        return parts.join('/')
-      } else {
-        let parts = []
-        if (clock.showDay) parts.push(day)
-        if (clock.showMonth) parts.push(month)
-        if (clock.showYear) parts.push(year)
-        return parts.join('/')
+      let result = []
+
+      if (clock.showDayOfWeek) {
+        result.push(dayNames[date.getDay()])
       }
+
+      if (clock.dateFormat === 'numeric-mdy') {
+        let dateParts = []
+        if (clock.showMonth) dateParts.push(month)
+        if (clock.showDay) dateParts.push(day)
+        if (clock.showYear) dateParts.push(year)
+        if (dateParts.length > 0) result.push(dateParts.join('/'))
+      } else {
+        let dateParts = []
+        if (clock.showDay) dateParts.push(day)
+        if (clock.showMonth) dateParts.push(month)
+        if (clock.showYear) dateParts.push(year)
+        if (dateParts.length > 0) result.push(dateParts.join('/'))
+      }
+
+      return result.join(', ')
     }
   }
 
@@ -186,6 +204,15 @@ function ClockItem({ clock, isSelected, isLocked, onSelect, onDeselect, onUpdate
 
   const formattedDate = formatDate(time)
 
+  // Hide entire clock if all elements are hidden
+  const showNameElement = clock.showName !== false
+  const showClockElement = clock.showClock !== false
+  const showDateElement = clock.showDate !== false
+
+  if (!showNameElement && !showClockElement && !showDateElement) {
+    return null
+  }
+
   return (
     <div
       ref={clockRef}
@@ -197,25 +224,29 @@ function ClockItem({ clock, isSelected, isLocked, onSelect, onDeselect, onUpdate
       onClick={handleClick}
       onMouseDown={handleMouseDown}
     >
-      <div
-        className={`clock-name ${clock.nameSettings.fontClass}`}
-        style={{
-          color: nameRgba,
-          fontSize: `${clock.nameSettings.size}px`
-        }}
-      >
-        {getDisplayName()}
-      </div>
-      <div
-        className={`clock-time ${clock.clockSettings.fontClass}`}
-        style={{
-          color: clockRgba,
-          fontSize: `${clock.clockSettings.size}px`
-        }}
-      >
-        {formatTime(time)}
-      </div>
-      {formattedDate && (
+      {showNameElement && (
+        <div
+          className={`clock-name ${clock.nameSettings.fontClass}`}
+          style={{
+            color: nameRgba,
+            fontSize: `${clock.nameSettings.size}px`
+          }}
+        >
+          {getDisplayName()}
+        </div>
+      )}
+      {showClockElement && (
+        <div
+          className={`clock-time ${clock.clockSettings.fontClass}`}
+          style={{
+            color: clockRgba,
+            fontSize: `${clock.clockSettings.size}px`
+          }}
+        >
+          {formatTime(time)}
+        </div>
+      )}
+      {showDateElement && formattedDate && (
         <div
           className={`clock-date ${clock.dateSettings.fontClass}`}
           style={{

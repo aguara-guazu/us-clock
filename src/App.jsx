@@ -38,6 +38,10 @@ function App() {
       showDay: true,
       showMonth: true,
       showYear: true,
+      showDayOfWeek: false,
+      showName: true,
+      showClock: true,
+      showDate: true,
       position: { x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 50 },
       nameSettings: {
         fontClass: 'poiret-one-regular',
@@ -108,6 +112,10 @@ function App() {
       showDay: true,
       showMonth: true,
       showYear: true,
+      showDayOfWeek: false,
+      showName: true,
+      showClock: true,
+      showDate: true,
       position: findFreePosition(),
       nameSettings: {
         fontClass: 'poiret-one-regular',

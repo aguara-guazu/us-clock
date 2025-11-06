@@ -131,10 +131,21 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
                 <div className="main-section">
                   <div
                     className={`main-section-header ${expandedMainSection === 'name' ? 'expanded' : ''}`}
-                    onClick={() => toggleMainSection('name')}
                   >
-                    <span>Name</span>
-                    <span className="expand-icon">{expandedMainSection === 'name' ? '▼' : '▶'}</span>
+                    <span onClick={() => toggleMainSection('name')} style={{ flex: 1, cursor: 'pointer' }}>Name</span>
+                    <button
+                      className="visibility-toggle"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDisplayToggle(clock.id, 'showName', !(clock.showName !== false))
+                      }}
+                      title={clock.showName !== false ? 'Hide name' : 'Show name'}
+                    >
+                      {clock.showName !== false ? '👁️' : '👁️‍🗨️'}
+                    </button>
+                    <span className="expand-icon" onClick={() => toggleMainSection('name')} style={{ cursor: 'pointer' }}>
+                      {expandedMainSection === 'name' ? '▼' : '▶'}
+                    </span>
                   </div>
                   {expandedMainSection === 'name' && (
                     <div className="main-section-content">
@@ -186,10 +197,21 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
                 <div className="main-section">
                   <div
                     className={`main-section-header ${expandedMainSection === 'clock' ? 'expanded' : ''}`}
-                    onClick={() => toggleMainSection('clock')}
                   >
-                    <span>Clock</span>
-                    <span className="expand-icon">{expandedMainSection === 'clock' ? '▼' : '▶'}</span>
+                    <span onClick={() => toggleMainSection('clock')} style={{ flex: 1, cursor: 'pointer' }}>Clock</span>
+                    <button
+                      className="visibility-toggle"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDisplayToggle(clock.id, 'showClock', !(clock.showClock !== false))
+                      }}
+                      title={clock.showClock !== false ? 'Hide clock' : 'Show clock'}
+                    >
+                      {clock.showClock !== false ? '👁️' : '👁️‍🗨️'}
+                    </button>
+                    <span className="expand-icon" onClick={() => toggleMainSection('clock')} style={{ cursor: 'pointer' }}>
+                      {expandedMainSection === 'clock' ? '▼' : '▶'}
+                    </span>
                   </div>
                   {expandedMainSection === 'clock' && (
                     <div className="main-section-content">
@@ -265,10 +287,21 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
                 <div className="main-section">
                   <div
                     className={`main-section-header ${expandedMainSection === 'date' ? 'expanded' : ''}`}
-                    onClick={() => toggleMainSection('date')}
                   >
-                    <span>Date</span>
-                    <span className="expand-icon">{expandedMainSection === 'date' ? '▼' : '▶'}</span>
+                    <span onClick={() => toggleMainSection('date')} style={{ flex: 1, cursor: 'pointer' }}>Date</span>
+                    <button
+                      className="visibility-toggle"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDisplayToggle(clock.id, 'showDate', !(clock.showDate !== false))
+                      }}
+                      title={clock.showDate !== false ? 'Hide date' : 'Show date'}
+                    >
+                      {clock.showDate !== false ? '👁️' : '👁️‍🗨️'}
+                    </button>
+                    <span className="expand-icon" onClick={() => toggleMainSection('date')} style={{ cursor: 'pointer' }}>
+                      {expandedMainSection === 'date' ? '▼' : '▶'}
+                    </span>
                   </div>
                   {expandedMainSection === 'date' && (
                     <div className="main-section-content">
@@ -298,6 +331,14 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
                             <div className="setting-group">
                               <label>Display Options</label>
                               <div className="display-options">
+                                <label className="checkbox-label">
+                                  <input
+                                    type="checkbox"
+                                    checked={clock.showDayOfWeek ?? false}
+                                    onChange={(e) => handleDisplayToggle(clock.id, 'showDayOfWeek', e.target.checked)}
+                                  />
+                                  Show day of week
+                                </label>
                                 <label className="checkbox-label">
                                   <input
                                     type="checkbox"

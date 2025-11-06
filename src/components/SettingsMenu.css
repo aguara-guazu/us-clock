@@ -283,6 +283,23 @@
   background: white;
 }
 
+.visibility-toggle {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  margin: 0 4px;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visibility-toggle:hover {
+  opacity: 0.7;
+}
+
 .subsection {
   margin-bottom: 12px;
   border: 1px solid #e8e8e8;
