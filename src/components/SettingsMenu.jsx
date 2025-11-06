@@ -469,31 +469,81 @@ function SettingsMenu({ clocks, isLocked, background, onToggleLock, onAddClock, 
             )}
 
             {background.type === 'image' && (
-              <div className="setting-group">
-                <label>Select Image</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0]
-                    if (file) {
-                      const reader = new FileReader()
-                      reader.onload = (event) => {
-                        onUpdateBackground({ imageData: event.target.result })
-                      }
-                      reader.readAsDataURL(file)
-                    }
-                  }}
-                />
-                {background.imageData && (
-                  <button
-                    className="remove-button"
-                    onClick={() => onUpdateBackground({ imageData: null })}
+              <>
+                <div className="setting-group">
+                  <label>Image Source</label>
+                  <select
+                    value={background.imageSource || 'file'}
+                    onChange={(e) => {
+                      const newSource = e.target.value
+                      onUpdateBackground({
+                        imageSource: newSource,
+                        imageData: null,
+                        imageUrl: ''
+                      })
+                    }}
                   >
-                    Remove Image
-                  </button>
+                    <option value="file">Upload File</option>
+                    <option value="url">Image URL</option>
+                  </select>
+                </div>
+
+                {background.imageSource === 'file' && (
+                  <div className="setting-group">
+                    <label>Select Image</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0]
+                        if (file) {
+                          const reader = new FileReader()
+                          reader.onload = (event) => {
+                            onUpdateBackground({
+                              imageData: event.target.result,
+                              imageUrl: ''
+                            })
+                          }
+                          reader.readAsDataURL(file)
+                        }
+                      }}
+                    />
+                    {background.imageData && (
+                      <button
+                        className="remove-button"
+                        onClick={() => onUpdateBackground({ imageData: null })}
+                      >
+                        Remove Image
+                      </button>
+                    )}
+                  </div>
                 )}
-              </div>
+
+                {background.imageSource === 'url' && (
+                  <div className="setting-group">
+                    <label>Image URL</label>
+                    <input
+                      type="text"
+                      placeholder="https://example.com/image.jpg"
+                      value={background.imageUrl || ''}
+                      onChange={(e) => {
+                        onUpdateBackground({
+                          imageUrl: e.target.value,
+                          imageData: null
+                        })
+                      }}
+                    />
+                    {background.imageUrl && (
+                      <button
+                        className="remove-button"
+                        onClick={() => onUpdateBackground({ imageUrl: '' })}
+                      >
+                        Clear URL
+                      </button>
+                    )}
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

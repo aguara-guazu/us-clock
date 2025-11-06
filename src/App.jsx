@@ -78,7 +78,9 @@ function App() {
       youtubeUrl: '',
       youtubeId: '',
       isMuted: true,
-      imageData: null
+      imageSource: 'file', // 'file' or 'url'
+      imageData: null,
+      imageUrl: ''
     }
   })
 
@@ -203,11 +205,11 @@ function App() {
       {background.type === 'youtube' && background.youtubeId && (
         <YouTubeBackground videoId={background.youtubeId} isMuted={background.isMuted} />
       )}
-      {background.type === 'image' && background.imageData && (
+      {background.type === 'image' && (background.imageData || background.imageUrl) && (
         <div
           className="background-container"
           style={{
-            backgroundImage: `url(${background.imageData})`,
+            backgroundImage: `url(${background.imageSource === 'url' ? background.imageUrl : background.imageData})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
