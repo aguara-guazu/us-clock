@@ -193,6 +193,35 @@ function SettingsMenu({ clocks, isLocked, background, onToggleLock, onAddClock, 
                   )}
                 </div>
 
+                {/* Preferences Section */}
+                <div className="main-section">
+                  <div
+                    className={`main-section-header ${expandedMainSection === 'preferences' ? 'expanded' : ''}`}
+                    onClick={() => toggleMainSection('preferences')}
+                  >
+                    <span>Preferences</span>
+                    <span className="expand-icon">{expandedMainSection === 'preferences' ? '▼' : '▶'}</span>
+                  </div>
+                  {expandedMainSection === 'preferences' && (
+                    <div className="main-section-content">
+                      <div className="setting-group checkbox-group">
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={clock.autoColor ?? false}
+                            onChange={(e) => handleDisplayToggle(clock.id, 'autoColor', e.target.checked)}
+                          />
+                          Auto color based on background
+                        </label>
+                        <p className="setting-description">
+                          Automatically adjusts text colors to contrast with the background.
+                          {background.type === 'youtube' && ' Updates every 3 seconds for videos.'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Clock Section */}
                 <div className="main-section">
                   <div

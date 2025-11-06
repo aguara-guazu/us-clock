@@ -33,19 +33,19 @@
 
 .clock-name {
   text-align: center;
-  transition: all 0.3s ease;
+  transition: color 1s ease, font-size 0.3s ease, opacity 0.3s ease;
   white-space: nowrap;
 }
 
 .clock-time {
   text-align: center;
-  transition: all 0.3s ease;
+  transition: color 1s ease, font-size 0.3s ease, opacity 0.3s ease;
   white-space: nowrap;
   letter-spacing: 0.05em;
 }
 
 .clock-date {
   text-align: center;
-  transition: all 0.3s ease;
+  transition: color 1s ease, font-size 0.3s ease, opacity 0.3s ease;
   white-space: nowrap;
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import ClockItem from './components/ClockItem'
 import FloatingBubble from './components/FloatingBubble'
 import YouTubeBackground from './components/YouTubeBackground'
+import AutoColorManager from './components/AutoColorManager'
 import { getLocalTimezone } from './utils/timezones'
 import './App.css'
 
@@ -43,6 +44,7 @@ function App() {
       showName: true,
       showClock: true,
       showDate: true,
+      autoColor: false,
       position: { x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 50 },
       nameSettings: {
         fontClass: 'poiret-one-regular',
@@ -137,6 +139,7 @@ function App() {
       showName: true,
       showClock: true,
       showDate: true,
+      autoColor: false,
       position: findFreePosition(),
       nameSettings: {
         fontClass: 'poiret-one-regular',
@@ -241,6 +244,13 @@ function App() {
         onUpdateClock={updateClock}
         onUpdateBackground={updateBackground}
         extractYouTubeId={extractYouTubeId}
+      />
+
+      {/* Auto Color Manager */}
+      <AutoColorManager
+        clocks={clocks}
+        background={background}
+        onUpdateClock={updateClock}
       />
     </div>
   )
