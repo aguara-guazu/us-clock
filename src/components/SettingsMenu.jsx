@@ -207,15 +207,7 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
                                 <label className="checkbox-label">
                                   <input
                                     type="checkbox"
-                                    checked={clock.showHours !== false}
-                                    onChange={(e) => handleDisplayToggle(clock.id, 'showHours', e.target.checked)}
-                                  />
-                                  Show hours
-                                </label>
-                                <label className="checkbox-label">
-                                  <input
-                                    type="checkbox"
-                                    checked={clock.showMinutes !== false}
+                                    checked={clock.showMinutes ?? true}
                                     onChange={(e) => handleDisplayToggle(clock.id, 'showMinutes', e.target.checked)}
                                   />
                                   Show minutes
@@ -223,7 +215,7 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
                                 <label className="checkbox-label">
                                   <input
                                     type="checkbox"
-                                    checked={clock.showSeconds !== false}
+                                    checked={clock.showSeconds ?? true}
                                     onChange={(e) => handleDisplayToggle(clock.id, 'showSeconds', e.target.checked)}
                                   />
                                   Show seconds

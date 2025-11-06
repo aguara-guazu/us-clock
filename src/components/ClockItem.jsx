@@ -91,13 +91,14 @@ function ClockItem({ clock, isSelected, isLocked, onSelect, onDeselect, onUpdate
   const formatTime = (date) => {
     try {
       const zonedTime = toZonedTime(date, clock.timezone)
-      let formatString = ''
+      let formatString = 'HH' // Hours are always shown
 
-      if (clock.showHours) formatString += 'HH'
-      if (clock.showMinutes) formatString += (formatString ? ':mm' : 'mm')
-      if (clock.showSeconds) formatString += (formatString ? ':ss' : 'ss')
-
-      if (!formatString) formatString = 'HH:mm:ss' // fallback
+      if (clock.showMinutes !== false) {
+        formatString += ':mm'
+      }
+      if (clock.showSeconds !== false) {
+        formatString += ':ss'
+      }
 
       return format(zonedTime, formatString, { timeZone: clock.timezone })
     } catch (error) {
@@ -106,12 +107,11 @@ function ClockItem({ clock, isSelected, isLocked, onSelect, onDeselect, onUpdate
       const minutes = String(date.getMinutes()).padStart(2, '0')
       const seconds = String(date.getSeconds()).padStart(2, '0')
 
-      let parts = []
-      if (clock.showHours) parts.push(hours)
-      if (clock.showMinutes) parts.push(minutes)
-      if (clock.showSeconds) parts.push(seconds)
+      let parts = [hours] // Hours are always shown
+      if (clock.showMinutes !== false) parts.push(minutes)
+      if (clock.showSeconds !== false) parts.push(seconds)
 
-      return parts.length > 0 ? parts.join(':') : `${hours}:${minutes}:${seconds}`
+      return parts.join(':')
     }
   }
 
