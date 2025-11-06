@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FONTS } from '../App'
+import { TIMEZONES } from '../utils/timezones'
 import TimezoneSelector from './TimezoneSelector'
 import ColorSettings from './ColorSettings'
 import './SettingsMenu.css'
@@ -66,6 +67,14 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
     })
   }
 
+  const getDisplayName = (clock) => {
+    if (clock.useTimezoneName) {
+      const tzInfo = TIMEZONES.find(tz => tz.tz === clock.timezone)
+      return tzInfo ? tzInfo.city : clock.name
+    }
+    return clock.name
+  }
+
   return (
     <div className="settings-menu">
       {/* Lock Toggle */}
@@ -88,7 +97,7 @@ function SettingsMenu({ clocks, isLocked, onToggleLock, onAddClock, onRemoveCloc
               onClick={() => toggleClock(clock.id)}
             >
               <span className="clock-icon">🕔</span>
-              <span className="clock-title">{clock.name}</span>
+              <span className="clock-title">{getDisplayName(clock)}</span>
               <button
                 className="delete-button"
                 onClick={(e) => {
